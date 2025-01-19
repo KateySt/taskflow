@@ -92,7 +92,7 @@ public class SecurityServiceImpl implements SecurityServiceInterface {
      * Generates a JWT token for the authenticated user.
      *
      * @param authentication the user's details used to generate the token.
-     * @param id the user's unique identifier.
+     * @param id             the user's unique identifier.
      * @return a signed JWT token.
      */
     @Override
