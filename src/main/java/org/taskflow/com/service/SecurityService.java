@@ -7,7 +7,7 @@ import org.taskflow.com.service.impl.UserDetailsImpl;
 
 import java.util.Objects;
 
-public interface SecurityServiceInterface {
+public interface SecurityService {
     SessionInfo register(NewUser newUser);
 
     SessionInfo loginInfo(Authentication auth);

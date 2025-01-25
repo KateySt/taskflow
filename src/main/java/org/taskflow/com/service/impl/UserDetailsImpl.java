@@ -10,9 +10,9 @@ import java.util.List;
 
 public class UserDetailsImpl implements UserDetails {
 
-    private String username;
-    private String password;
-    private Role role;
+    private final String username;
+    private final String password;
+    private final Role role;
 
     public UserDetailsImpl(String username, String password, Role role) {
         this.username = username;

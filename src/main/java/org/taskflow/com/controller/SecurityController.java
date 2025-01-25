@@ -14,7 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.taskflow.com.model.*;
-import org.taskflow.com.service.SecurityServiceInterface;
+import org.taskflow.com.service.SecurityService;
 
 @AllArgsConstructor
 @RestController
@@ -23,7 +23,7 @@ import org.taskflow.com.service.SecurityServiceInterface;
 @Tag(name = "Security", description = "Endpoints for user authentication and registration")
 public class SecurityController {
 
-    private final SecurityServiceInterface service;
+    private final SecurityService service;
 
     /**
      * Logs in an existing user and returns session information, including a JWT token.

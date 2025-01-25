@@ -17,7 +17,7 @@ import org.taskflow.com.mapper.MapperSecurity;
 import org.taskflow.com.model.NewUser;
 import org.taskflow.com.model.SessionInfo;
 import org.taskflow.com.repository.UserRepository;
-import org.taskflow.com.service.SecurityServiceInterface;
+import org.taskflow.com.service.SecurityService;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -28,12 +28,13 @@ import static java.time.temporal.ChronoUnit.MINUTES;
 @AllArgsConstructor
 @Service
 @Transactional
-public class SecurityServiceImpl implements SecurityServiceInterface {
+public class SecurityServiceImpl implements SecurityService {
 
     private final JwtEncoder jwtEncoder;
     private final UserRepository repository;
     private final MapperSecurity mapperSecurity;
     private final PasswordEncoder passwordEncoder;
+    private final TokenCacheServiceImpl tokenCacheService;
 
     /**
      * Handles login by retrieving the user, generating a JWT token,
@@ -45,6 +46,7 @@ public class SecurityServiceImpl implements SecurityServiceInterface {
                 .orElseThrow(() -> new UsernameNotFoundException(auth.getName() + " not found user by email"));
 
         var token = getJWTToken(mapperSecurity.toUserDetailsImpl(user), user.getId());
+        tokenCacheService.saveToken(user.getEmail(), "Bearer "+token);
         return mapperSecurity.toSessionInfo(token);
     }
 
@@ -56,6 +58,7 @@ public class SecurityServiceImpl implements SecurityServiceInterface {
     public SessionInfo register(NewUser newUser) {
         var user = saveNewUser(newUser);
         var token = getJWTToken(mapperSecurity.toUserDetailsImpl(user), user.getId());
+        tokenCacheService.saveToken(user.getEmail(),"Bearer "+token);
         return mapperSecurity.toSessionInfo(token);
     }
 
@@ -75,17 +78,6 @@ public class SecurityServiceImpl implements SecurityServiceInterface {
                 .role(Role.USER)
                 .createdAt(LocalDateTime.now())
                 .build());
-    }
-
-    /**
-     * Retrieves the user ID based on the provided email.
-     *
-     * @throws UsernameNotFoundException if no user is found with the given email.
-     */
-    private String getUserIdByEmail(String email) {
-        var user = repository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(email + " not found user by email"));
-        return user.getId().toString();
     }
 
     /**
