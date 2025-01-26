@@ -47,7 +47,7 @@ public class SecurityServiceImpl implements SecurityService {
                 .orElseThrow(() -> new UsernameNotFoundException(auth.getName() + " not found user by email"));
 
         var token = getJWTToken(mapperSecurity.toUserDetailsImpl(user), user.getId());
-        tokenCacheService.saveToken(user.getEmail(), "Bearer "+token);
+        tokenCacheService.saveToken(user.getEmail(), "Bearer " + token);
         return mapperSecurity.toSessionInfo(token);
     }
 
@@ -59,7 +59,7 @@ public class SecurityServiceImpl implements SecurityService {
     public SessionInfo register(NewUser newUser) {
         var user = saveNewUser(newUser);
         var token = getJWTToken(mapperSecurity.toUserDetailsImpl(user), user.getId());
-        tokenCacheService.saveToken(user.getEmail(),"Bearer "+token);
+        tokenCacheService.saveToken(user.getEmail(), "Bearer " + token);
         return mapperSecurity.toSessionInfo(token);
     }
 

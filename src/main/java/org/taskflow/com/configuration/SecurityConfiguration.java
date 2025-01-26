@@ -50,8 +50,8 @@ class SecurityConfiguration {
                 .requestMatchers(antMatcher("/webjars/**")).permitAll()
                 .requestMatchers(antMatcher("/api/v1/auth/login")).permitAll()
                 .requestMatchers(antMatcher("/api/v1/auth/register")).permitAll()
-                .anyRequest().authenticated()
                 .requestMatchers(antMatcher("/api/v1/projects/**")).hasAnyRole("MANAGER", "ADMIN")
+                .anyRequest().authenticated()
         );
         http.sessionManagement(sessionManagement -> sessionManagement
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

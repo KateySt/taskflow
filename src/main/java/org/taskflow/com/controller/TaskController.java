@@ -15,6 +15,7 @@ import org.taskflow.com.model.CreateTaskDTO;
 import org.taskflow.com.model.TaskDTO;
 import org.taskflow.com.model.UpdateTaskDTO;
 import org.taskflow.com.service.TaskService;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ import java.util.List;
 public class TaskController {
 
     private final TaskService taskService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     /**
      * Creates a new task for the authenticated user.
@@ -56,7 +58,10 @@ public class TaskController {
     @ResponseStatus(HttpStatus.CREATED)
     public TaskDTO createTask(@RequestBody CreateTaskDTO createTaskDTO, @RequestHeader("Authorization") String authHeader) {
         try {
-            return taskService.createTask(createTaskDTO, authHeader);
+            TaskDTO createdTask = taskService.createTask(createTaskDTO, authHeader);
+            messagingTemplate.convertAndSend("/task-status/updates",
+                    "Task created: " + createdTask.id() + " - " + createdTask.status());
+            return createdTask;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found", e);
         }
@@ -153,7 +158,10 @@ public class TaskController {
     @PutMapping("/{id}")
     public TaskDTO updateTask(@PathVariable Long id, @RequestBody UpdateTaskDTO updateTaskDTO, @RequestHeader("Authorization") String authHeader) {
         try {
-            return taskService.updateTask(id, updateTaskDTO, authHeader);
+            TaskDTO updatedTask = taskService.updateTask(id, updateTaskDTO, authHeader);
+            messagingTemplate.convertAndSend("/task-status/updates",
+                    "Task updated: " + updatedTask.id() + " - " + updatedTask.status());
+            return updatedTask;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found", e);
         }
@@ -185,6 +193,8 @@ public class TaskController {
     public void deleteTask(@PathVariable Long id, @RequestHeader("Authorization") String authHeader) {
         try {
             taskService.deleteTask(id, authHeader);
+            messagingTemplate.convertAndSend("/task-status/updates",
+                    "Task deleted: " + id);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found", e);
         }
