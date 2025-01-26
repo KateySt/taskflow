@@ -7,7 +7,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
-import org.taskflow.com.service.impl.TokenCacheServiceImpl;
+import org.taskflow.com.service.TokenCacheService;
 
 @Aspect
 @Component
@@ -15,7 +15,7 @@ import org.taskflow.com.service.impl.TokenCacheServiceImpl;
 @RequiredArgsConstructor
 public class TokenValidationAspect {
 
-    private final TokenCacheServiceImpl tokenCacheService;
+    private final TokenCacheService tokenCacheService;
 
     @Around("@annotation(CheckToken)")
     public Object checkTokenAndEmail(ProceedingJoinPoint joinPoint) throws Throwable {

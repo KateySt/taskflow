@@ -18,6 +18,7 @@ import org.taskflow.com.model.NewUser;
 import org.taskflow.com.model.SessionInfo;
 import org.taskflow.com.repository.UserRepository;
 import org.taskflow.com.service.SecurityService;
+import org.taskflow.com.service.TokenCacheService;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -34,7 +35,7 @@ public class SecurityServiceImpl implements SecurityService {
     private final UserRepository repository;
     private final MapperSecurity mapperSecurity;
     private final PasswordEncoder passwordEncoder;
-    private final TokenCacheServiceImpl tokenCacheService;
+    private final TokenCacheService tokenCacheService;
 
     /**
      * Handles login by retrieving the user, generating a JWT token,

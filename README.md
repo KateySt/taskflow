@@ -62,7 +62,7 @@ This repository contains a Task Management System built with Spring Boot, design
         - Task creation alerts.
         - Deadline reminders (using Spring Scheduler).
     - **Real-Time Notifications:**
-        - Implemented via WebSocket or Server-Sent Events (SSE).
+        - Implemented via WebSocket.
         - Notifications for task status updates.
 
 7. **Analytics Integration**

@@ -13,6 +13,7 @@ import org.taskflow.com.repository.ProjectRepository;
 import org.taskflow.com.repository.UserRepository;
 import org.taskflow.com.annotation.CheckToken;
 import org.taskflow.com.service.ProjectService;
+import org.taskflow.com.service.TokenCacheService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +25,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
-    private final TokenCacheServiceImpl tokenCacheService;
+    private final TokenCacheService tokenCacheService;
 
     /**
      * Creates a new project and returns the details of the newly created project.

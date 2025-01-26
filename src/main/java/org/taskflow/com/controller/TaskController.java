@@ -14,7 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.taskflow.com.model.CreateTaskDTO;
 import org.taskflow.com.model.TaskDTO;
 import org.taskflow.com.model.UpdateTaskDTO;
-import org.taskflow.com.service.impl.TaskServiceImpl;
+import org.taskflow.com.service.TaskService;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import java.util.List;
 @Tag(name = "Tasks", description = "Endpoints for managing tasks")
 public class TaskController {
 
-    private final TaskServiceImpl taskService;
+    private final TaskService taskService;
 
     /**
      * Creates a new task for the authenticated user.

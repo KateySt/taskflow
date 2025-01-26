@@ -12,6 +12,8 @@ import org.taskflow.com.model.UpdateTaskDTO;
 import org.taskflow.com.repository.ProjectRepository;
 import org.taskflow.com.repository.TaskRepository;
 import org.taskflow.com.repository.UserRepository;
+import org.taskflow.com.service.TaskService;
+import org.taskflow.com.service.TokenCacheService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,12 +21,12 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class TaskServiceImpl {
+public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
-    private final TokenCacheServiceImpl tokenCacheService;
+    private final TokenCacheService tokenCacheService;
 
     /**
      * Creates a new task and assigns it to a user and a project.
