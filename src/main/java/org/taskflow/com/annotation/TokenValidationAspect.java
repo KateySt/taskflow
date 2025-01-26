@@ -1,4 +1,4 @@
-package org.taskflow.com.service;
+package org.taskflow.com.annotation;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

@@ -29,6 +29,14 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
+    /**
+     * Creates a new project for the authenticated user.
+     * Requires a valid authorization token in the request header.
+     *
+     * @param createProjectDTO the project data to be created.
+     * @param authHeader the authorization header containing the user's token.
+     * @return the details of the created project.
+     */
     @Operation(
             summary = "Create a new project",
             description = "Allows authenticated users to create a new project.",
@@ -53,10 +61,17 @@ public class ProjectController {
     public ProjectDTO createProject(
             @RequestBody @Valid CreateProjectDTO createProjectDTO,
             @RequestHeader("Authorization") String authHeader) {
-        log.info("User is creating a new project: {}",  createProjectDTO);
-        return projectService.createProject(createProjectDTO,authHeader);
+        log.info("User is creating a new project: {}", createProjectDTO);
+        return projectService.createProject(createProjectDTO, authHeader);
     }
 
+    /**
+     * Retrieves all projects created by the authenticated user.
+     * Requires a valid authorization token in the request header.
+     *
+     * @param authHeader the authorization header containing the user's token.
+     * @return a list of projects created by the authenticated user.
+     */
     @Operation(
             summary = "Get all projects",
             description = "Retrieve all projects created by the authenticated user.",
@@ -78,6 +93,15 @@ public class ProjectController {
         return projectService.getProjects(authHeader);
     }
 
+    /**
+     * Retrieves a specific project by its ID, if it belongs to the authenticated user.
+     * Requires a valid authorization token in the request header.
+     *
+     * @param id the ID of the project.
+     * @param user the authenticated user.
+     * @param authHeader the authorization header containing the user's token.
+     * @return the details of the requested project.
+     */
     @Operation(
             summary = "Get project by ID",
             description = "Retrieve a specific project by its ID, if it belongs to the authenticated user.",
@@ -104,9 +128,18 @@ public class ProjectController {
             @AuthenticationPrincipal UserEntity user,
             @RequestHeader("Authorization") String authHeader) {
         log.info("Fetching project {} for user", id);
-        return projectService.getProjectById(id,authHeader);
+        return projectService.getProjectById(id, authHeader);
     }
 
+    /**
+     * Updates an existing project for the authenticated user.
+     * Requires a valid authorization token in the request header.
+     *
+     * @param id the ID of the project to update.
+     * @param updateProjectDTO the updated project data.
+     * @param authHeader the authorization header containing the user's token.
+     * @return the updated project details.
+     */
     @Operation(
             summary = "Update project",
             description = "Update the details of an existing project.",
@@ -133,9 +166,16 @@ public class ProjectController {
             @RequestBody @Valid UpdateProjectDTO updateProjectDTO,
             @RequestHeader("Authorization") String authHeader) {
         log.info("Updating project {} for user: {}", id, updateProjectDTO);
-        return projectService.updateProject(id, updateProjectDTO,authHeader);
+        return projectService.updateProject(id, updateProjectDTO, authHeader);
     }
 
+    /**
+     * Deletes a specific project by its ID for the authenticated user.
+     * Requires a valid authorization token in the request header.
+     *
+     * @param id the ID of the project to delete.
+     * @param authHeader the authorization header containing the user's token.
+     */
     @Operation(
             summary = "Delete project",
             description = "Delete a specific project by its ID.",
@@ -157,6 +197,6 @@ public class ProjectController {
             @PathVariable Long id,
             @RequestHeader("Authorization") String authHeader) {
         log.info("Deleting project {} for user", id);
-        projectService.deleteProject(id,authHeader);
+        projectService.deleteProject(id, authHeader);
     }
 }
