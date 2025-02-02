@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Created Successfully</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f0ff;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(128, 0, 128, 0.2);
+        }
+        .header {
+            background: #6a0dad;
+            color: #ffffff;
+            text-align: center;
+            padding: 15px;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+        }
+        .content {
+            padding: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+        .footer {
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+            margin-top: 20px;
+        }
+        .btn {
+            display: inline-block;
+            background: #8a2be2;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background: #5d1e9c;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">Task Created Successfully</div>
+    <div class="content">
+        <p>Hello <span th:text="${email}">User</span>,</p>
+        <p>Your task <strong>"<span th:text="${taskTitle}">Task Name</span>"</strong> has been successfully created.</p>
+        <p>You can view and manage it by clicking the button below.</p>
+        <p>
+            <a href="{{taskLink}}" class="btn">View Task</a>
+        </p>
+    </div>
+    <div class="footer">
+        <p>Best regards,</p>
+        <p>Your Team</p>
+    </div>
+</div>
+</body>
+</html>
+

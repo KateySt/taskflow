@@ -15,5 +15,5 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
 
     Optional<TaskEntity> findByIdAndAssignedTo_Email(Long taskId, String emailByToken);
 
-    List<TaskEntity> findByDeadlineBetween(LocalDateTime now, LocalDateTime oneHourLater);
+    List<TaskEntity> findByDeadlineBetween(LocalDateTime deadlineStart, LocalDateTime deadlineEnd);
 }
