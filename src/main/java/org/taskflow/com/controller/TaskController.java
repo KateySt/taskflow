@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,8 +17,12 @@ import org.taskflow.com.model.TaskDTO;
 import org.taskflow.com.model.UpdateTaskDTO;
 import org.taskflow.com.service.TaskService;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.taskflow.com.service.TokenCacheService;
+import org.taskflow.com.service.impl.MailServiceImpl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/tasks")
@@ -27,6 +32,8 @@ public class TaskController {
 
     private final TaskService taskService;
     private final SimpMessagingTemplate messagingTemplate;
+    private final MailServiceImpl mailService;
+    private final TokenCacheService tokenCacheService;
 
     /**
      * Creates a new task for the authenticated user.
@@ -61,9 +68,18 @@ public class TaskController {
             TaskDTO createdTask = taskService.createTask(createTaskDTO, authHeader);
             messagingTemplate.convertAndSend("/task-status/updates",
                     "Task created: " + createdTask.id() + " - " + createdTask.status());
+            String email = tokenCacheService.getEmailByToken(authHeader);
+
+            Map<String, Object> variables = new HashMap<>();
+            variables.put("email", email);
+            variables.put("taskStatus", createdTask.status());
+
+            mailService.sendEmail(email, "Task successfully created", "email-template", variables);
             return createdTask;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found", e);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
         }
     }
 
