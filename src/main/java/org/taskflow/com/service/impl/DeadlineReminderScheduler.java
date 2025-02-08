@@ -3,9 +3,10 @@ package org.taskflow.com.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.taskflow.com.entity.TaskEntity;
 import org.taskflow.com.repository.TaskRepository;
-import org.springframework.transaction.annotation.Transactional;
+import org.taskflow.com.service.MailService;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import java.util.Map;
 public class DeadlineReminderScheduler {
 
     private final TaskRepository taskRepository;
-    private final MailServiceImpl mailService;
+    private final MailService mailService;
 
     @Transactional
     @Scheduled(cron = "0 0 * * * ?")

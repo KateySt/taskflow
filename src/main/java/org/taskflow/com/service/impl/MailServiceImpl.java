@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.taskflow.com.service.MailService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class MailServiceImpl {
+public class MailServiceImpl implements MailService {
 
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
@@ -22,6 +23,7 @@ public class MailServiceImpl {
     @Value("${spring.mail.username}")
     private String fromEmail;
 
+    @Override
     public void sendEmail(String to, String subject, String templateName, Map<String, Object> variables) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");

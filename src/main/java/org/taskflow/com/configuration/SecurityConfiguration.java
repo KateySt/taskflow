@@ -50,6 +50,7 @@ class SecurityConfiguration {
                 .requestMatchers(antMatcher("/webjars/**")).permitAll()
                 .requestMatchers(antMatcher("/api/v1/auth/login")).permitAll()
                 .requestMatchers(antMatcher("/api/v1/auth/register")).permitAll()
+                .requestMatchers(antMatcher("/api/v1/analytics/**")).hasAnyRole("MANAGER", "ADMIN")
                 .requestMatchers(antMatcher("/api/v1/projects/**")).hasAnyRole("MANAGER", "ADMIN")
                 .anyRequest().authenticated()
         );

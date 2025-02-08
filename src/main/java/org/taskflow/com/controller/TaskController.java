@@ -10,15 +10,15 @@ import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.taskflow.com.model.CreateTaskDTO;
 import org.taskflow.com.model.TaskDTO;
 import org.taskflow.com.model.UpdateTaskDTO;
+import org.taskflow.com.service.MailService;
 import org.taskflow.com.service.TaskService;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.taskflow.com.service.TokenCacheService;
-import org.taskflow.com.service.impl.MailServiceImpl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,14 +32,14 @@ public class TaskController {
 
     private final TaskService taskService;
     private final SimpMessagingTemplate messagingTemplate;
-    private final MailServiceImpl mailService;
+    private final MailService mailService;
     private final TokenCacheService tokenCacheService;
 
     /**
      * Creates a new task for the authenticated user.
      *
      * @param createTaskDTO the task creation data
-     * @param authHeader the authorization header containing the JWT token
+     * @param authHeader    the authorization header containing the JWT token
      * @return the created task DTO
      */
     @Operation(
@@ -112,7 +112,7 @@ public class TaskController {
     /**
      * Retrieves a specific task by ID for the authenticated user.
      *
-     * @param id the task ID
+     * @param id         the task ID
      * @param authHeader the authorization header containing the JWT token
      * @return the task DTO
      */
@@ -147,9 +147,9 @@ public class TaskController {
     /**
      * Updates an existing task assigned to the authenticated user.
      *
-     * @param id the task ID
+     * @param id            the task ID
      * @param updateTaskDTO the task update data
-     * @param authHeader the authorization header containing the JWT token
+     * @param authHeader    the authorization header containing the JWT token
      * @return the updated task DTO
      */
     @Operation(
@@ -186,7 +186,7 @@ public class TaskController {
     /**
      * Deletes a task by ID for the authenticated user.
      *
-     * @param id the task ID
+     * @param id         the task ID
      * @param authHeader the authorization header containing the JWT token
      */
     @Operation(
