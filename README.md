@@ -85,5 +85,5 @@ This repository contains a Task Management System built with Spring Boot, design
 10. **Deployment**
     - **Docker & CI/CD:**
         - `Dockerfile` and `docker-compose` for containerization.
-        - CI/CD pipelines via GitHub Actions or Jenkins.
+        - CI/CD pipelines via GitHub Actions.
 ---
