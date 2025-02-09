@@ -12,6 +12,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: 123456789
+          POSTGRES_DB: taskflow
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U root -d taskflow"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -30,8 +50,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: Wait for PostgreSQL
+        run: sleep 10
+
+      - name: Apply database migrations
+        run: |
+          PGPASSWORD=123456789 psql -h localhost -U root -d taskflow -f src/main/resources/db/init.sql
+        env:
+          PGPASSWORD: 123456789
+
       - name: Build with Maven
         run: mvn clean install -DskipTests=true
+
+      - name: Run tests
+        run: mvn test
 
       - name: Package the application
         run: mvn package -DskipTests=true
