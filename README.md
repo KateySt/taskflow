@@ -12,9 +12,9 @@ This repository contains a Task Management System built with Spring Boot, design
         - Hibernate, JWT, PostgreSQL/MySQL, Lombok, MapStruct.
         - Swagger for API documentation.
     - Configurations:
-        - Database connection (`application.yml` or `application.properties`).
-        - Logging setup with Logback/SLF4J.
-    - Database integration and migration using Flyway or Liquibase.
+        - Database connection (`application.yml`).
+        - Logging setup with SLF4J.
+    - Database integration and migration using Liquibase.
 
 2. **Data Model Development**
     - **Entities:**
@@ -81,12 +81,9 @@ This repository contains a Task Management System built with Spring Boot, design
 9. **Testing**
     - **Unit Tests:** Service logic validation using JUnit and Mockito.
     - **Integration Tests:** REST endpoints tested with MockMvc.
-    - **Security Tests:** Validation of access control and token authentication.
 
 10. **Deployment**
     - **Docker & CI/CD:**
         - `Dockerfile` and `docker-compose` for containerization.
         - CI/CD pipelines via GitHub Actions or Jenkins.
-    - Deployment to cloud platforms like Heroku, AWS, or DigitalOcean.
-
 ---

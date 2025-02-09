@@ -1,17 +1,19 @@
 package org.taskflow.com.service.impl;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.taskflow.com.entity.TaskEntity;
+import org.taskflow.com.exception.DeadlineReminderException;
 import org.taskflow.com.repository.TaskRepository;
 import org.taskflow.com.service.MailService;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 @RequiredArgsConstructor
@@ -25,20 +27,29 @@ public class DeadlineReminderScheduler {
     public void sendDeadlineReminder() {
         List<TaskEntity> tasks = getTasksThatAreDueInOneHour();
 
-        for (TaskEntity task : tasks) {
+        tasks.forEach(this::sendReminderEmailAsync);
+    }
+
+    private void sendReminderEmailAsync(TaskEntity task) {
+        CompletableFuture.runAsync(() -> {
             try {
-                String to = task.getAssignedTo().getEmail();
-
-                Map<String, Object> variables = new HashMap<>();
-                variables.put("taskTitle", task.getTitle());
-                variables.put("taskLink", "https://yourapp.com/tasks/" + task.getId());
-                variables.put("email", to);
-
-                mailService.sendEmail(to, "Deadline Reminder: Task Due Soon!", "email-template-deadline", variables);
+                sendReminderEmail(task);
             } catch (Exception e) {
-                System.out.println("Error sending email for task " + task.getId() + ": " + e.getMessage());
+                throw new DeadlineReminderException(task.getId(), task.getAssignedTo().getEmail(), e);
             }
-        }
+        });
+    }
+
+    private void sendReminderEmail(TaskEntity task) throws MessagingException {
+        String to = task.getAssignedTo().getEmail();
+
+        Map<String, Object> variables = Map.of(
+                "taskTitle", task.getTitle(),
+                "taskLink", "https://yourapp.com/tasks/" + task.getId(),
+                "email", to
+        );
+
+        mailService.sendEmail(to, "Deadline Reminder: Task Due Soon!", "email-template-deadline", variables);
     }
 
     private List<TaskEntity> getTasksThatAreDueInOneHour() {

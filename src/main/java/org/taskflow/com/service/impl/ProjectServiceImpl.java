@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.taskflow.com.entity.ProjectEntity;
 import org.taskflow.com.entity.UserEntity;
+import org.taskflow.com.mapper.MapperProject;
 import org.taskflow.com.model.CreateProjectDTO;
 import org.taskflow.com.model.ProjectDTO;
 import org.taskflow.com.model.UpdateProjectDTO;
@@ -26,6 +27,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
     private final TokenCacheService tokenCacheService;
+    private final MapperProject mapperProject;
 
     /**
      * Creates a new project and returns the details of the newly created project.
@@ -40,18 +42,13 @@ public class ProjectServiceImpl implements ProjectService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         // Build a new project entity with the provided data
-        ProjectEntity project = ProjectEntity.builder()
-                .name(createProjectDTO.name())
-                .description(createProjectDTO.description())
-                .createdBy(user)
-                .createdAt(LocalDateTime.now())
-                .build();
+        ProjectEntity project = mapperProject.toProjectEntity(createProjectDTO, user);
 
         // Save the project to the database
         ProjectEntity savedProject = projectRepository.save(project);
 
         // Return the project DTO
-        return toProjectDTO(savedProject);
+        return mapperProject.toProjectDTO(savedProject);
     }
 
     /**
@@ -63,7 +60,7 @@ public class ProjectServiceImpl implements ProjectService {
         // Find all projects created by the user using the email from the token
         return projectRepository.findByCreatedBy_Email(tokenCacheService.getEmailByToken(authHeader))
                 .stream()
-                .map(this::toProjectDTO) // Map each project to a ProjectDTO
+                .map(mapperProject::toProjectDTO) // Map each project to a ProjectDTO
                 .toList();
     }
 
@@ -80,7 +77,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .orElseThrow(() -> new EntityNotFoundException("Project not found"));
 
         // Return the project DTO
-        return toProjectDTO(project);
+        return mapperProject.toProjectDTO(project);
     }
 
     /**
@@ -104,7 +101,7 @@ public class ProjectServiceImpl implements ProjectService {
         ProjectEntity updatedProject = projectRepository.save(project);
 
         // Return the updated project DTO
-        return toProjectDTO(updatedProject);
+        return mapperProject.toProjectDTO(updatedProject);
     }
 
     /**
@@ -120,14 +117,5 @@ public class ProjectServiceImpl implements ProjectService {
 
         // Delete the project from the repository
         projectRepository.delete(project);
-    }
-
-    /**
-     * Converts a ProjectEntity object to a ProjectDTO.
-     * @param project The ProjectEntity to convert.
-     * @return The ProjectDTO representing the project.
-     */
-    private ProjectDTO toProjectDTO(ProjectEntity project) {
-        return new ProjectDTO(project.getId(), project.getName(), project.getDescription(), project.getCreatedAt());
     }
 }
