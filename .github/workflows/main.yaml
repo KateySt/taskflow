@@ -50,15 +50,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Wait for PostgreSQL
-        run: sleep 10
-
-      - name: Apply database migrations
-        run: |
-          PGPASSWORD=123456789 psql -h localhost -U root -d taskflow -f src/main/resources/db/changelog/ddl/001_create_table.sql
-        env:
-          PGPASSWORD: 123456789
-
       - name: Build with Maven
         run: mvn clean install -DskipTests=true
 
