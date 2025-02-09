@@ -55,7 +55,7 @@ jobs:
 
       - name: Apply database migrations
         run: |
-          PGPASSWORD=123456789 psql -h postgres -U root -d taskflow -f src/main/resources/db/changelog/ddl/001_create_table.sql
+          PGPASSWORD=123456789 psql -h localhost -U root -d taskflow -f src/main/resources/db/changelog/ddl/001_create_table.sql
         env:
           PGPASSWORD: 123456789
 
