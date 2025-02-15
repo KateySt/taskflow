@@ -89,4 +89,3 @@ This repository contains a **Task Management System** built with **Spring Boot**
 - **Dockerfile & docker-compose** for containerization
 - **GitHub Actions** for automated CI/CD pipelines
 
----
