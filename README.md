@@ -1,6 +1,6 @@
 # Task Management System
 
-This repository contains a **Task Management System** built with **Spring Boot**, designed to facilitate efficient user, project, and task management. The system supports authentication, authorization, CRUD operations, notifications, analytics, and API documentation.
+**Task Management System** built with **Spring Boot**, designed to facilitate efficient user, project, and task management. The system supports authentication, authorization, CRUD operations, notifications, analytics, and API documentation.
 
 ## 🚀 Features
 
